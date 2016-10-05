@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>js hw5-11</title>
+	</head>
+	<body>
+	<script>
+
+//1 что выведет код
+
+getBigName(userName);
+function getBigName(name){
+	name = name + '';
+	return name.toUpperCase();
+}
+var userName = 'Ivan';
+
+document.write(getBigName()); //UNDEFINED т.к. var userName объявленна после вызова функции и ее не видит function getBigName
+document.write('<br>');
+
+//2 что выведет код
+
+function test(){
+	var name = 'Vasia';
+	return getBigName(userName);
+}
+
+function getBigName(name){
+	name = name + "";
+	return name.toUpperCase();
+}
+
+var userName = 'Ivan';
+document.write(test());//IVAN ?????? почему?????;
+document.write('<br>');
+
+
+//3 что выведет код
+
+var food = 'cucumber';
+
+(function(){
+	var food = 'bread';
+	getFood();
+})();
+
+function getFood(){
+	console.log(food);  //cucumber function getFood() лежит в глобальном окружении, там и ищет переменную
+}
+
+// замыкание 
+//1 - 4 что выведет код
+
+var dollar, getDollar;
+
+(function (){
+	var dollar = 0;
+	getDollar = function(){
+		return dollar;
+	}
+}());
+dollar = 30;
+console.log(getDollar()); // 0 т.к  getDollar "увидела" в своем окружении var dollar = 0;
+
+
+//2 - 5 что выведет код
+
+// var greet = 'Hello ';
+// (function (){
+// 	var text = 'world';
+// 	console.log(greet + text);
+// }());
+// console.log(greet + text);// ошибка т.к var text = 'world'; не видна а иддти обратно по scope - нельзя!
+
+
+
+//3 - 6 создайте функцию, которая б умела делать: 
+// minus(10)(6); //4
+// minus(5)(6); //-1
+// minus(10)(0); //10
+// minus()(6); //6
+// minus()(); //0
+
+
+function minus(firstNumb){
+  return function(secondNumb){
+  	return firstNumb - secondNumb;
+  };
+};
+
+document.write(minus(10)(6));
+document.write(minus(5)(6));
+document.write(minus(10)(0));
+document.write(minus()(6)); //????????
+document.write(minus()()); //????????
+
+
+
+
+// 4 - 7 реализовать функцию, которая умножает и умеет запоминать возвращаемый результат между вызовами
+// function MultiplyMaker....
+// const multiply = MultiplyMaker(2);
+
+// multiply(2); // 4 (2*2)
+// multiply(1); // 4 (4*1)
+// multiply(3); // 12 (4*3)
+// multiply(10); // 120 (12*10)
+
+function multiplyMaker(val ){
+	var count = val;
+	return function(sum){
+		return count*=sum;
+	}
+}
+var multiply = multiplyMaker(2);
+console.log(multiply(2));
+console.log(multiply(1));
+console.log(multiply(3));
+console.log(multiply(10));
+
+
+// 5 - 8 реализовать модуль который работает со строкой и имеет методы: 
+// 1. установить сторку
+//  1.1 если передано пустое значение, то установить пустую сторку
+//  1.2 если передано число, чмсло перевести к строке
+// 2. получить сторку
+// 3. получить длину строки
+// 4. получить строку перевертыш
+
+var stringInfo = (function(){
+	var string;
+
+	function setString(val){
+		if(val == undefined){
+			string = '';
+		} else if(!isNaN(val)){
+			string = val + '';
+		} else{
+			string = val;
+		}		
+	};
+
+	function getString(){
+		return string;
+		return this;
+	};
+	function getLengthString(){
+		return string.length;
+		return this;
+	};
+	function getBackString(){
+		for(var i = string.length; i--;){
+      		return string[i];
+      		return this;
+		};
+	};
+	return{
+		setString: setString,
+		getString: getString,
+		getLengthString: getLengthString,
+		getBackString: getBackString
+	};
+}());
+stringInfo.setString('info');
+console.log(stringInfo.getString());
+console.log(stringInfo.getLengthString());
+console.log(stringInfo.getBackString());
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+
+//6 - 9 создать модуль "калькулятор", который умеет складывать, умножать, вычитать, делить и возводить в степенью Конечное значение округлить до двух знаков после точки (значение должно храниться в обычной переменной, не this)
+// модуль.установитьЗначение(10); // значение = 10
+// модуль.прибавить(5); // значение += 5
+// модуль.умножить(2); // значение *= 2
+// модуль.узнатьЗначение(); // вывести в консоль 30 (здесь надо округлить)
+
+// var calculatorModule = (function(){
+// 	var result;
+
+// 	function setNum(val){
+// 		result = val;
+// 	};
+// 	function plusNum(val){
+// 		result += val;
+// 	};
+// 	function minusNum(val){
+// 		result -= val;
+// 	};
+// 	function multyNum(val){
+// 		result *= val;
+// 	};
+// 	function partNum(val){
+// 		result /= val;
+// 	};
+// 	function powNum(val){
+// 		result = Math.pow(result, val);
+// 	};
+// 	function getNum(){
+// 		return result = result.toFixed(2);
+// 	};
+// 	return{
+// 		setNum: setNum,
+// 		plusNum: plusNum,
+// 		minusNum: minusNum,
+// 		multyNum: multyNum,
+// 		partNum: partNum,
+// 		getNum: getNum
+// 	};
+// });
+// document.write(calculatorModule.setNum(10).plusNum(5).multyNum(2).getNum());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</script>
+	</body>
+</html>
